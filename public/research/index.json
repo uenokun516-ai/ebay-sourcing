@@ -1,0 +1,272 @@
+{
+ "schemaVersion": 1,
+ "updatedAt": "2026-11-04T03:40:00.000Z",
+ "notice": "Web上の記事・価格ガイド・出品例から集めた「調べる候補」です。売れる保証ではありません。仕入れ前に必ずeBayの売却済み（成約）を確認してください。",
+ "runs": [
+  {
+   "date": "2026-11-04T03:40:00.000Z",
+   "themes": [
+    "レトロゲーム",
+    "ゲーム機"
+   ],
+   "summary": "初回：Web記事・価格ガイド・eBayの出品例から9件を候補化（eBay APIは未接続）",
+   "report": "research/reports/2026-11-04.md"
+  }
+ ],
+ "items": [
+  {
+   "id": "gb-light",
+   "nameJa": "ゲームボーイライト（本体）",
+   "nameEn": "Nintendo Game Boy Light MGB-101",
+   "category": "ゲーム機",
+   "platform": "ゲームボーイ",
+   "why": "日本限定の本体。海外では通常のゲームボーイより高い価格帯で扱われているという価格ガイドがある。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "画面焼け・液晶の線",
+    "電池ボックス腐食",
+    "リペア品・社外液晶の混在"
+   ],
+   "searchTerms": "game boy light japan",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "価格ガイド",
+     "text": "日本限定のゲームボーイライトは400〜800ドルのプレミア価格帯とされる",
+     "source": "originalpricing.com",
+     "url": "https://originalpricing.com/?p=508"
+    }
+   ]
+  },
+  {
+   "id": "pokemon-gb-jp",
+   "nameJa": "ポケモン 初期GB/GBC 日本版ソフト",
+   "nameEn": "Pocket Monsters Japanese Game Boy (Red/Green/Blue/Crystal)",
+   "category": "ゲーム",
+   "platform": "ゲームボーイ",
+   "why": "eBayの日本版ゲームボーイソフトの売れ筋に日本版ポケモン青が表示されている。完品・状態により価格差が大きい。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "偽物（海賊版）が多い",
+    "セーブ用電池切れ",
+    "裸カセットは価格競争"
+   ],
+   "searchTerms": "pocket monsters japanese game boy",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "eBay売れ筋表示",
+     "text": "NTSC-J ゲームボーイの「Best selling」に日本版ポケモン青",
+     "source": "eBay カテゴリーページ",
+     "url": "https://www.ebay.com/b/Nintendo-Game-Boy-NTSC-J-Japan-Video-Games/139973/bn_339729"
+    }
+   ]
+  },
+  {
+   "id": "saturn-rare",
+   "nameJa": "セガサターン レアタイトル",
+   "nameEn": "Sega Saturn rare Japanese titles",
+   "category": "ゲーム",
+   "platform": "セガサターン",
+   "why": "海外の買取業者の価格動向表で、サターンのレアタイトルは「上昇」、一般タイトルも「横ばい〜上昇」とされている。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "ケース割れ・帯の有無で価格差",
+    "どのタイトルがレアかは個別に確認が必要"
+   ],
+   "searchTerms": "sega saturn japan",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "価格動向",
+     "text": "サターン（レアタイトル）は上昇傾向と記載",
+     "source": "NOSTOS 価格動向ガイド",
+     "url": "https://nostos.pages.dev/guides/retro-game-price-trends-2024-2025"
+    }
+   ]
+  },
+  {
+   "id": "pce-cd",
+   "nameJa": "PCエンジン CD-ROM² ソフト",
+   "nameEn": "PC Engine Super CD-ROM2 Japanese games",
+   "category": "ゲーム",
+   "platform": "PCエンジン",
+   "why": "日本版PCエンジンの完品中央値は46ドル程度、一部タイトルは数百ドルで出品されている。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "ディスク傷・ケース割れ",
+    "帯（スパインカード）の有無"
+   ],
+   "searchTerms": "pc engine super cd-rom2",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "価格ガイド",
+     "text": "日本版PCエンジン 完品の中央値 46ドル（299タイトル）",
+     "source": "RetroCharting（2026年5月更新）",
+     "url": "https://retrocharting.com/games/jp-pc-engine"
+    },
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "eBay出品例",
+     "text": "一部タイトルが300ドル台で出品（出品価格・成約ではない）",
+     "source": "eBay ストア",
+     "url": "https://www.ebay.com/str/japangamesandcards/Retro-Games-Consoles/_i.html?store_cat=42267008010"
+    }
+   ]
+  },
+  {
+   "id": "famicom-body",
+   "nameJa": "ファミコン本体",
+   "nameEn": "Nintendo Famicom console HVC-001",
+   "category": "ゲーム機",
+   "platform": "ファミコン",
+   "why": "国内では買取額が低い一方、海外では高く取引されることがあると、eBay輸出事業者がインタビューで語っている。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "動作確認・修理の手間",
+    "RF出力のみで海外の環境では使いにくい",
+    "電源（AC100V）の説明"
+   ],
+   "searchTerms": "famicom console japan",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "記事",
+     "text": "国内で100円程度のファミコンが海外で1万〜2万円で取引されることがある",
+     "source": "みんかぶマガジン（2026年7月）",
+     "url": "https://mag.minkabu.jp/money/42361/"
+    }
+   ]
+  },
+  {
+   "id": "dc-limited",
+   "nameJa": "ドリームキャスト 限定版ソフト",
+   "nameEn": "Sega Dreamcast limited edition (Japan)",
+   "category": "ゲーム",
+   "platform": "ドリームキャスト",
+   "why": "日本版ドリームキャストの限定版・未開封品が200ドル前後で出品されている例がある。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "未開封の真贋",
+    "特典の欠品"
+   ],
+   "searchTerms": "dreamcast limited edition japan",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "eBay出品例",
+     "text": "バイオハザード コード:ベロニカ 限定版が約216ドルで出品（出品価格）",
+     "source": "eBay ストア",
+     "url": "https://www.ebay.com/str/japangamesandcards/Retro-Games-Consoles/_i.html?store_cat=42267008010"
+    }
+   ]
+  },
+  {
+   "id": "sfc-n64-body",
+   "nameJa": "スーパーファミコン・ニンテンドウ64 本体",
+   "nameEn": "Super Famicom / Nintendo 64 console Japan",
+   "category": "ゲーム機",
+   "platform": "SFC / N64",
+   "why": "輸出向けの記事で、スーパーファミコンと64は「動作テスト済み」の実用品として需要が高いとされている。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "動作テスト必須",
+    "付属品（ACアダプタ・AVケーブル）の有無",
+    "重量があり送料が高い"
+   ],
+   "searchTerms": "super famicom console",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "記事",
+     "text": "SFC・N64はeBayで高い需要、動作テスト済みの明記が必須",
+     "source": "trade-king.biz",
+     "url": "https://trade-king.biz/recommend-category/"
+    }
+   ]
+  },
+  {
+   "id": "suikoden-ps2",
+   "nameJa": "幻想水滸伝シリーズ（PS2）",
+   "nameEn": "Genso Suikoden PS2 Japanese",
+   "category": "ゲーム",
+   "platform": "PS2",
+   "why": "eBayで人気の日本のゲームソフトとして紹介され、平均相場52.25ドルと記載されている。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "記事の相場の時点が不明（自分で成約例を確認）"
+   ],
+   "searchTerms": "genso suikoden ps2",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "記事",
+     "text": "eBay人気日本ゲーム1位、平均相場 52.25ドル",
+     "source": "MissJ Web",
+     "url": "https://missj.blog/kobutsu-2002/"
+    }
+   ]
+  },
+  {
+   "id": "3ds-dsi-jp",
+   "nameJa": "日本版 3DS / DSi LL 本体（限定色）",
+   "nameEn": "Nintendo 3DS / DSi LL console Japan",
+   "category": "ゲーム機",
+   "platform": "3DS / DS",
+   "why": "日本版の携帯機（限定色）が100〜200ドル前後で出品されている例がある。",
+   "ebayActive": null,
+   "domestic": null,
+   "risks": [
+    "3DSは地域制限あり（海外ソフトが動かない）",
+    "バッテリー劣化・画面傷",
+    "充電器の電圧"
+   ],
+   "searchTerms": "nintendo 3ds japan console",
+   "firstSeen": "2026-11-04T03:40:00.000Z",
+   "lastSeen": "2026-11-04T03:40:00.000Z",
+   "seenCount": 1,
+   "signals": [
+    {
+     "date": "2026-11-04T03:40:00.000Z",
+     "kind": "eBay出品例",
+     "text": "DSi LL 本体が約179ドルで出品（出品価格）",
+     "source": "eBay ストア",
+     "url": "https://www.ebay.com/str/japangamesandcards/Retro-Games-Consoles/_i.html?store_cat=42267008010"
+    }
+   ]
+  }
+ ]
+}

@@ -6,6 +6,7 @@ import { CONDITION_LABELS, type ConditionKey, type MarketObservation, type Produ
 import { useData, go, productName, fmtDate, todayIso } from './store';
 import { Header, Card, Text, NumField, Select, Check, DateField, Empty, Warn, ExtLink, VerdictBadge } from './components';
 import { evaluate, defaultDraft } from './evaluate';
+import { NetLookup } from './NetLookup';
 
 const blankProduct = (): Omit<Product, 'id' | 'createdAt' | 'updatedAt'> => ({
   nameJa: '', nameEn: '', maker: '', platform: '', modelNumber: '', region: '', language: '', edition: '', color: '',
@@ -105,6 +106,8 @@ export function ProductPage({ id }: { id: string }) {
       {dirty && <div class="pad"><button class="primary" onClick={async () => { await save<Product>('products', p); setDirty(false); reload(); }}>商品情報を保存</button></div>}
 
       <CodesCard productId={id} codes={codes} />
+
+      <Card><NetLookup code={codes.find((c) => !c.storeName)?.normalized.replace(/^0(?=\d{12}$)/, '') ?? ''} keyword={p.searchTerms || p.nameEn || p.modelNumber || p.nameJa} productId={id} /></Card>
 
       <Card title="相場（成約例）" right={<button class="mini" onClick={() => setEditing(newObs(id, data.settings.defaultCurrency))}>＋成約例</button>}>
         <p class="muted small">eBay Product Research 等の公式画面で確認した内容を手入力します。自動取得はしていません。

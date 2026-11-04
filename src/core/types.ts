@@ -268,6 +268,9 @@ export interface Settings {
   minComparable: number; // 5
   hourlyWage: Num;
   lastBackupAt: string | null;
+  workerUrl: string; // 中継サーバーURL（未設定ならネット検索APIは使わない）
+  appKey: string; // 中継サーバーの合言葉（APIキーではない）
+  ebayMarket: string; // EBAY_US など
   updatedAt: string;
 }
 
@@ -285,6 +288,9 @@ export const DEFAULT_SETTINGS: Settings = {
   minComparable: 5,
   hourlyWage: null,
   lastBackupAt: null,
+  workerUrl: '',
+  appKey: '',
+  ebayMarket: 'EBAY_US',
   updatedAt: new Date(0).toISOString(),
 };
 

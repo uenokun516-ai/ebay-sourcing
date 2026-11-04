@@ -4,12 +4,14 @@ import { exportBackup, validateBackup, restoreBackup, toCsv } from '../data/back
 import type { FeeProfile, FxRate, Settings, ShippingQuote, Base, Product, ProductCode, MarketObservation, SourcingCandidate } from '../core/types';
 import { useData, go, fmtDate, todayIso, isoToDateInput } from './store';
 import { Header, Card, Text, NumField, Select, Check, DateField, Empty, Warn, download } from './components';
+import { callWorker } from '../core/lookup';
 
 export function MorePage() {
   const { data } = useData();
   const last = data.settings.lastBackupAt;
   const days = last ? Math.floor((Date.now() - new Date(last).getTime()) / 86400000) : null;
   const items: [string, string, string][] = [
+    ['research', '定期リサーチ（売れ筋候補）', '蓄積データ'],
     ['requests', '探し物リクエスト', `${data.requests.length}件`],
     ['settings', '設定（目標・慎重シナリオ等）', data.settings.targetM ? `目標 ¥${Number(data.settings.targetM).toLocaleString()}` : '目標未設定'],
     ['fees', '手数料プロファイル', `${data.feeProfiles.length}件`],
@@ -62,6 +64,19 @@ export function SettingsPage() {
         <NumField label="相場の再確認目安" value={String(s.staleDays)} onChange={(v) => u({ staleDays: Number(v) || 30 })} unit="日" />
         <NumField label="少数表示の基準（未満で少数）" value={String(s.minComparable)} onChange={(v) => u({ minComparable: Number(v) || 5 })} unit="件" />
         <small class="muted">需要や利益を保証する閾値ではありません。</small>
+      </Card>
+      <Card title="ネット検索（中継サーバー）">
+        <Text label="中継サーバーのURL" value={s.workerUrl} onInput={(v) => u({ workerUrl: v.trim() })} placeholder="https://xxxx.workers.dev" type="url" />
+        <Text label="合言葉（APP_KEY）" value={s.appKey} onInput={(v) => u({ appKey: v.trim() })} />
+        <Select label="eBay の検索先" value={s.ebayMarket} onChange={(v) => u({ ebayMarket: v })}
+          options={[['EBAY_US', 'アメリカ（ebay.com）'], ['EBAY_GB', 'イギリス'], ['EBAY_DE', 'ドイツ'], ['EBAY_AU', 'オーストラリア'], ['EBAY_CA', 'カナダ']]} />
+        <button class="mini" disabled={!s.workerUrl} onClick={async () => {
+          try {
+            const h = await callWorker<{ ok: boolean; yahoo: boolean; ebay: boolean }>(s.workerUrl, s.appKey, 'health', {});
+            setMsg(`接続OK：Yahoo! ${h.yahoo ? '設定済み' : '未設定'} ／ eBay ${h.ebay ? '設定済み' : '未設定'}（保存を押して確定）`);
+          } catch (e) { setMsg('接続できません：' + (e as Error).message); }
+        }}>接続テスト</button>
+        <small class="muted">APIキー自体は中継サーバー側に保存し、このアプリやバックアップには入りません。合言葉はバックアップに含まれます。</small>
       </Card>
       <div class="pad">
         {msg && <p class="ok">{msg}</p>}

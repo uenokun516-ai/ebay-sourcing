@@ -5,6 +5,7 @@ import type { Product, ProductCode, SourcingCandidate, ConditionKey, PriceKind }
 import { CONDITION_LABELS, PRICE_KIND_LABELS } from '../core/types';
 import { useData, go, productName } from './store';
 import { Header, Card, Text, NumField, Select, Warn, Empty } from './components';
+import { NetLookup } from './NetLookup';
 import type { Num } from '../core/money';
 
 const FORMATS = ['ean_13', 'ean_8', 'upc_a'];
@@ -134,6 +135,7 @@ export function ScanPage() {
   const [msg, setMsg] = useState('');
   const [query, setQuery] = useState('');
   const [chosen, setChosen] = useState<Product | null>(null);
+  const [suggest, setSuggest] = useState('');
   const dedupe = useRef(makeDeduper());
 
   const accept = (raw: string) => {
@@ -142,6 +144,7 @@ export function ScanPage() {
     if (navigator.vibrate) navigator.vibrate(60);
     setCode(p);
     setChosen(null);
+    setSuggest('');
     setCamOn(false); // 読み取り後はカメラ停止
   };
 
@@ -198,7 +201,8 @@ export function ScanPage() {
             <div>
               <p class="strong">商品未登録</p>
               <p class="muted">このコードは台帳にありません。価格や商品名は表示しません。商品名・型番を入力して登録できます。</p>
-              <NewProductForm code={code} onDone={async (p) => { await reload(); setChosen(p); }} />
+              <NetLookup code={code.storeInternal ? '' : code.normalized.replace(/^0(?=\d{12}$)/, '')} keyword={suggest} onUseName={(n) => setSuggest(n)} />
+              <NewProductForm key={suggest} code={code} initialName={suggest} onDone={async (p) => { await reload(); setChosen(p); }} />
             </div>
           ) : (
             <div>
@@ -238,8 +242,8 @@ function ProductPick({ p, onPick, selected, storeName }: { p: Product; onPick: (
   );
 }
 
-function NewProductForm({ code, onDone }: { code: ParsedCode; onDone: (p: Product) => void }) {
-  const [nameJa, setNameJa] = useState('');
+function NewProductForm({ code, onDone, initialName = '' }: { code: ParsedCode; onDone: (p: Product) => void; initialName?: string }) {
+  const [nameJa, setNameJa] = useState(initialName);
   const [nameEn, setNameEn] = useState('');
   const [model, setModel] = useState('');
   const [platform, setPlatform] = useState('');
