@@ -1,0 +1,95 @@
+const { chromium, devices } = require('playwright');
+(async () => {
+  const b = await chromium.launch();
+  const ctx = await b.newContext({ ...devices['iPhone 13'] });
+  const page = await ctx.newPage();
+  const errs = [];
+  page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  page.on('pageerror', e => errs.push(String(e)));
+  const shot = (n) => page.screenshot({ path: `/home/claude/shots/${n}.png`, fullPage: true });
+  await page.goto('http://localhost:4173/#/scan');
+  await page.waitForSelector('text=バーコードを読み取る');
+  // 未登録コード（先頭ゼロ付き UPC-A）
+  await page.fill('input[placeholder^="コードを手入力"]', '045496590420');
+  await page.click('button:has-text("照合")');
+  await page.waitForSelector('text=商品未登録');
+  const bodyTxt = await page.textContent('main');
+  console.log('unregistered shows price?', /¥\d/.test(bodyTxt));
+  await shot('01-unregistered');
+  await page.fill('label:has-text("商品名（日本語）") input', 'テスト携帯機');
+  await page.fill('label:has-text("型番") input', 'TEST-01');
+  await page.click('button:has-text("台帳に追加して確認")');
+  await page.waitForSelector('text=仕入れ候補として入力');
+  await page.fill('label:has-text("店頭価格") input', '3000');
+  await page.click('label:has-text("国内送料") button:has-text("0で確定")');
+  await page.click('button:has-text("保存して採算を判定")');
+  await page.waitForSelector('.verdict-card');
+  console.log('verdict initial:', await page.textContent('.vc-top .verdict'));
+  // 入力（受入テスト5の値）
+  const fillNum = async (label, v) => page.fill(`label.fld:has(> span:text-matches("^${label}")) input`, v);
+  await fillNum('商品売価 P', '40');
+  await fillNum('買い手負担送料 S', '10');
+  await fillNum('r：', '150');
+  await fillNum('手数料 F', '1200');
+  await page.selectOption('label:has-text("配送可否") select', 'yes');
+  await fillNum('国際送料 I', '1500');
+  await fillNum('梱包費 K', '100');
+  await fillNum('購入関連費 A（固定）', '0');
+  await fillNum('修理・清掃費 R', '0');
+  await fillNum('関税等', '0');
+  await fillNum('損失予備費 Q', '300');
+  await page.fill('label:has-text("国内送料 D") input', '200');
+  await page.waitForTimeout(300);
+  console.log('E standard:', await page.textContent('.vc-nums div:nth-child(1) b'));
+  console.log('verdict now:', await page.textContent('.vc-top .verdict'));
+  console.log('reasons:', await page.textContent('.reasons'));
+  await shot('02-estimate');
+  await page.click('button:has-text("この見積もりを保存")');
+  await page.waitForSelector('text=見積もりを保存しました');
+  await page.waitForTimeout(800);
+  // 設定で目標2000
+  await page.goto('http://localhost:4173/#/settings');
+  await page.fill('label:has-text("目標残額") input', '2000');
+  await page.click('button:has-text("保存（現在")');
+  await page.waitForSelector('text=保存しました');
+  await page.goto('http://localhost:4173/#/candidates');
+  await page.click('.row-card');
+  await page.waitForSelector('.verdict-card');
+  await page.waitForTimeout(300);
+  console.log('Cmax:', await page.textContent('.vc-nums div:nth-child(3) b'));
+  console.log('verdict w/target:', await page.textContent('.vc-top .verdict'));
+  console.log('reasons:', await page.textContent('.reasons'));
+  await shot('03-target');
+  // デモ
+  await page.goto('http://localhost:4173/#/about');
+  await page.click('button:has-text("架空デモ商品を追加")');
+  await page.waitForTimeout(500);
+  await page.goto('http://localhost:4173/#/candidates');
+  await page.waitForTimeout(300);
+  await shot('04-candidates');
+  // 再スキャンで既存候補
+  await page.goto('http://localhost:4173/#/scan');
+  await page.fill('input[placeholder^="コードを手入力"]', '45496590420'.padStart(12,'0'));
+  await page.click('button:has-text("照合")');
+  await page.waitForTimeout(300);
+  console.log('rescan existing link:', await page.isVisible('text=既存の候補'));
+  // 在庫
+  await page.goto('http://localhost:4173/#/products');
+  await page.waitForTimeout(300);
+  await shot('05-products');
+  await page.click('.row-card:has-text("架空デモ")');
+  await page.waitForTimeout(300);
+  await shot('06-product');
+  await page.goto('http://localhost:4173/#/more'); await page.waitForTimeout(300); await shot('07-more');
+  await page.goto('http://localhost:4173/#/backup'); await page.waitForTimeout(300);
+  const [dl] = await Promise.all([page.waitForEvent('download'), page.click('button:has-text("バックアップを書き出す")')]);
+  console.log('backup file:', dl.suggestedFilename());
+  // camera denied (no permission) → message
+  await page.goto('http://localhost:4173/#/scan');
+  await page.click('button:has-text("バーコードを読み取る")');
+  await page.waitForTimeout(1500);
+  console.log('camera msg:', (await page.textContent('.cam')).slice(0, 80));
+  await page.click('button:has-text("カメラを終了")');
+  console.log('errors:', errs);
+  await b.close();
+})();

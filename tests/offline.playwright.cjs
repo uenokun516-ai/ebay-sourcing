@@ -1,0 +1,21 @@
+const { chromium, devices } = require('playwright');
+(async () => {
+  const b = await chromium.launch();
+  const ctx = await b.newContext({ ...devices['iPhone 13'] });
+  const page = await ctx.newPage();
+  await page.goto('http://localhost:4173/#/about');
+  await page.click('button:has-text("架空デモ商品を追加")');
+  await page.waitForTimeout(3500);
+  await ctx.setOffline(true);
+  await page.reload();
+  await page.waitForSelector('.tabs');
+  console.log('offline banner:', await page.isVisible('.offline'));
+  const cid = await page.evaluate(() => new Promise((res) => { const r = indexedDB.open('ebay-sourcing'); r.onsuccess = () => { const q = r.result.transaction('candidates').objectStore('candidates').getAll(); q.onsuccess = () => res(q.result[0].id); }; }));
+  await page.evaluate((id) => { location.hash = '#/candidate/' + id; }, cid);
+  await page.waitForSelector('text=商品売価 P');
+  await page.locator('label.fld', { hasText: '商品売価 P' }).locator('input').fill('40');
+  await page.waitForTimeout(500);
+  console.log('page:', page.url().split('#')[1], '| E missing still listed:', (await page.textContent('.reasons')).slice(0, 60));
+  await page.screenshot({ path: '/home/claude/shots/08-offline.png' });
+  await b.close();
+})();
