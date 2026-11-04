@@ -1,0 +1,9 @@
+{
+  "name": "仕入れ判定ノート",
+  "short_name": "仕入れ判定",
+  "start_url": "./#/scan",
+  "display": "standalone",
+  "background_color": "#f6f7f5",
+  "theme_color": "#14532d",
+  "lang": "ja"
+}
