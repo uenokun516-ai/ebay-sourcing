@@ -157,3 +157,8 @@ details summary { cursor: pointer; font-weight: 600; color: var(--brand); paddin
 details.research summary { list-style: none; }
 details.research summary::-webkit-details-marker { display: none; }
 details.research p { margin: 8px 0; font-size: 14px; }
+.pre { white-space: pre-wrap; word-break: break-word; }
+.m-confirmed, .c-available { background: var(--ok-bg); color: var(--ok); }
+.m-candidate, .c-awaiting_setup { background: var(--amber-bg); color: var(--amber); }
+.m-mismatch, .c-unavailable { background: var(--red-bg); color: var(--red); }
+.c-manual_only, .c-unverified { background: var(--gray-bg); color: #4b5249; }

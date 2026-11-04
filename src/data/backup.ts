@@ -26,7 +26,7 @@ export function validateBackup(x: unknown): { ok: true; file: BackupFile } | { o
   for (const s of STORES) {
     const rows = f.data[s] ?? [];
     if (!Array.isArray(rows)) return { ok: false, error: `${s} が配列ではありません` };
-    for (const r of rows) if (!r || typeof (r as { id?: unknown }).id !== 'string') return { ok: false, error: `${s} にIDのないレコードがあります` };
+    for (const r of rows as unknown[]) if (!r || typeof (r as { id?: unknown }).id !== 'string') return { ok: false, error: `${s} にIDのないレコードがあります` };
   }
   return { ok: true, file: f };
 }

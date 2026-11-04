@@ -6,6 +6,7 @@ import { ProductsPage, ProductPage, ProductNewPage } from './Products';
 import { InventoryPage, InventoryItemPage } from './Inventory';
 import { RequestsPage, RequestPage } from './Requests';
 import { ResearchPage } from './Research';
+import { ImportPage, CsvImportPage, RecordsPage, RecordPage, SourcesPage } from './Records';
 import { MorePage, SettingsPage, FeesPage, ShippingPage, FxPage, BackupPage, TrashPage, AboutPage } from './More';
 
 const NAV: [string, string, string, string[]][] = [
@@ -13,7 +14,7 @@ const NAV: [string, string, string, string[]][] = [
   ['candidates', '候補', '⚖', ['candidates', 'candidate', 'candidate-new']],
   ['products', '商品', '☰', ['products', 'product', 'product-new']],
   ['inventory', '在庫', '▦', ['inventory']],
-  ['more', 'その他', '⋯', ['more', 'research', 'requests', 'request', 'settings', 'fees', 'shipping', 'fx', 'backup', 'trash', 'about']],
+  ['more', 'その他', '⋯', ['more', 'research', 'records', 'record', 'import', 'import-csv', 'sources', 'requests', 'request', 'settings', 'fees', 'shipping', 'fx', 'backup', 'trash', 'about']],
 ];
 
 function useOnline() {
@@ -42,6 +43,11 @@ export function App() {
     case 'inventory': page = id ? <InventoryItemPage id={id} key={id} /> : <InventoryPage />; break;
     case 'more': page = <MorePage />; break;
     case 'research': page = <ResearchPage />; break;
+    case 'records': page = <RecordsPage />; break;
+    case 'record': page = <RecordPage id={id} key={id} />; break;
+    case 'import': page = <ImportPage />; break;
+    case 'import-csv': page = <CsvImportPage />; break;
+    case 'sources': page = <SourcesPage />; break;
     case 'requests': page = <RequestsPage />; break;
     case 'request': page = <RequestPage id={id} key={id} />; break;
     case 'settings': page = <SettingsPage />; break;

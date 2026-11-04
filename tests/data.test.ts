@@ -12,7 +12,7 @@ describe('受入テスト2・11：保存・バックアップ・復元', () => {
     await save<InventoryItem>('inventory', { productId: p.id, estimateId: est.id } as any);
 
     const backup = JSON.parse(JSON.stringify(await exportBackup()));
-    expect(backup.schemaVersion).toBe(1);
+    expect(backup.schemaVersion).toBe(2);
     // 消してから復元
     await trash('products', p.id);
     await restoreBackup(validateBackup(backup).ok ? backup : (null as any));

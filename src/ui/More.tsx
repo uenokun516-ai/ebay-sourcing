@@ -12,6 +12,8 @@ export function MorePage() {
   const days = last ? Math.floor((Date.now() - new Date(last).getTime()) / 86400000) : null;
   const items: [string, string, string][] = [
     ['research', '定期リサーチ（売れ筋候補）', '蓄積データ'],
+    ['records', '取り込みデータ（出品・成約・入札・話題）', `${data.records.length}件`],
+    ['sources', '接続状態・データ取得検証表', ''],
     ['requests', '探し物リクエスト', `${data.requests.length}件`],
     ['settings', '設定（目標・慎重シナリオ等）', data.settings.targetM ? `目標 ¥${Number(data.settings.targetM).toLocaleString()}` : '目標未設定'],
     ['fees', '手数料プロファイル', `${data.feeProfiles.length}件`],
@@ -197,6 +199,7 @@ export function FxPage() {
 }
 
 const CSV_SETS: [StoreName, string][] = [
+  ['sourceRecords', '取り込みデータ'],
   ['products', '商品'], ['observations', '成約例'], ['candidates', '仕入れ候補'], ['estimates', '見積もり'], ['inventory', '在庫'], ['saleEvents', '在庫イベント'], ['requests', 'リクエスト'],
 ];
 
@@ -261,7 +264,7 @@ export function BackupPage() {
 
 const TRASH_LABELS: Partial<Record<StoreName, string>> = {
   products: '商品', productCodes: 'コード', observations: '成約例', candidates: '候補', feeProfiles: '手数料', shippingQuotes: '送料',
-  fxRates: '為替', estimates: '見積もり', requests: 'リクエスト', inventory: '在庫', saleEvents: '在庫イベント', attachments: '添付',
+  fxRates: '為替', estimates: '見積もり', sourceRecords: '取り込みデータ', requests: 'リクエスト', inventory: '在庫', saleEvents: '在庫イベント', attachments: '添付',
 };
 
 export function TrashPage() {

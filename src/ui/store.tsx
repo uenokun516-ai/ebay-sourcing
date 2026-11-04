@@ -7,6 +7,7 @@ import type {
   EstimateSnapshot, SourcingRequest, InventoryItem, SaleEvent, Attachment, Settings,
 } from '../core/types';
 import { DEFAULT_SETTINGS } from '../core/types';
+import type { SourceRecord } from '../core/records';
 
 export interface AllData {
   products: Product[];
@@ -21,12 +22,13 @@ export interface AllData {
   inventory: InventoryItem[];
   saleEvents: SaleEvent[];
   attachments: Attachment[];
+  records: SourceRecord[];
   settings: Settings;
 }
 
 const empty: AllData = {
   products: [], codes: [], observations: [], candidates: [], feeProfiles: [], shippingQuotes: [], fxRates: [],
-  estimates: [], requests: [], inventory: [], saleEvents: [], attachments: [], settings: DEFAULT_SETTINGS,
+  estimates: [], requests: [], inventory: [], saleEvents: [], attachments: [], records: [], settings: DEFAULT_SETTINGS,
 };
 
 interface Ctx { data: AllData; loaded: boolean; error: string | null; reload: () => Promise<void> }
@@ -38,14 +40,14 @@ export function DataProvider({ children }: { children: ComponentChildren }) {
   const [error, setError] = useState<string | null>(null);
   const reload = useCallback(async () => {
     try {
-      const [products, codes, observations, candidates, feeProfiles, shippingQuotes, fxRates, estimates, requests, inventory, saleEvents, attachments, settings] =
+      const [products, codes, observations, candidates, feeProfiles, shippingQuotes, fxRates, estimates, requests, inventory, saleEvents, attachments, records, settings] =
         await Promise.all([
           listAll<Product>('products'), listAll<ProductCode>('productCodes'), listAll<MarketObservation>('observations'),
           listAll<SourcingCandidate>('candidates'), listAll<FeeProfile>('feeProfiles'), listAll<ShippingQuote>('shippingQuotes'),
           listAll<FxRate>('fxRates'), listAll<EstimateSnapshot>('estimates'), listAll<SourcingRequest>('requests'),
-          listAll<InventoryItem>('inventory'), listAll<SaleEvent>('saleEvents'), listAll<Attachment>('attachments'), getSettings(),
+          listAll<InventoryItem>('inventory'), listAll<SaleEvent>('saleEvents'), listAll<Attachment>('attachments'), listAll<SourceRecord>('sourceRecords'), getSettings(),
         ]);
-      setData({ products, codes, observations, candidates, feeProfiles, shippingQuotes, fxRates, estimates, requests, inventory, saleEvents, attachments, settings });
+      setData({ products, codes, observations, candidates, feeProfiles, shippingQuotes, fxRates, estimates, requests, inventory, saleEvents, attachments, records, settings });
       setError(null);
     } catch (e) {
       setError('データを読み込めませんでした：' + String(e));

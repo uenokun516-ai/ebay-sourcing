@@ -2,7 +2,7 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import { DEFAULT_SETTINGS, type Base, type Settings } from '../core/types';
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2; // v2: sourceRecords を追加
 export const DB_NAME = 'ebay-sourcing';
 
 export const STORES = [
@@ -18,6 +18,7 @@ export const STORES = [
   'inventory',
   'saleEvents',
   'attachments',
+  'sourceRecords',
 ] as const;
 export type StoreName = (typeof STORES)[number];
 

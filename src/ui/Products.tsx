@@ -87,7 +87,12 @@ export function ProductPage({ id }: { id: string }) {
   const orig = data.products.find((p) => p.id === id);
   const [p, setP] = useState<Product | null>(orig ?? null);
   const [dirty, setDirty] = useState(false);
-  const [cond, setCond] = useState<ConditionKey>('used_complete');
+  const commonCond = (() => {
+    const c = new Map<ConditionKey, number>();
+    data.observations.filter((o) => o.productId === id && o.kind === 'sold').forEach((o) => c.set(o.condition, (c.get(o.condition) ?? 0) + 1));
+    return [...c.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? 'used_complete';
+  })();
+  const [cond, setCond] = useState<ConditionKey>(commonCond);
   const [editing, setEditing] = useState<MarketObservation | null>(null);
   useEffect(() => { if (orig && (!p || p.id !== orig.id)) setP(orig); }, [orig?.id]);
   if (!orig || !p) return <div><Header title="商品" back="products" /><Empty>見つかりません</Empty></div>;
@@ -106,6 +111,20 @@ export function ProductPage({ id }: { id: string }) {
       {dirty && <div class="pad"><button class="primary" onClick={async () => { await save<Product>('products', p); setDirty(false); reload(); }}>商品情報を保存</button></div>}
 
       <CodesCard productId={id} codes={codes} />
+
+      {(() => {
+        const rs = data.records.filter((r) => r.productId === id);
+        return rs.length > 0 ? (
+          <Card title={`取り込みデータ（${rs.length}）`}>
+            {rs.slice(0, 8).map((r) => (
+              <a class="obs" href={'#/record/' + r.id} key={r.id}>
+                <div class="grow small">{r.titleRaw.slice(0, 60) || r.canonicalUrl}<div><small class="muted">{r.sourceType === 'sold_observation' ? '成約' : r.sourceType === 'active_listing' ? '出品中' : r.sourceType === 'auction_bid' ? '入札中' : r.sourceType === 'social_signal' ? '話題' : '参考'} ／ {r.price ?? '—'} {r.currency} ／ {r.matchStatus === 'confirmed' ? '一致確認済' : r.matchStatus === 'candidate' ? '一致候補' : r.matchStatus === 'mismatch' ? '不一致' : '未特定'}{r.adoptedObservationId ? ' ／ 採用済み' : ''}</small></div></div>
+              </a>
+            ))}
+            <a href="#/records" class="small">一覧で見る</a>
+          </Card>
+        ) : null;
+      })()}
 
       <Card><NetLookup code={codes.find((c) => !c.storeName)?.normalized.replace(/^0(?=\d{12}$)/, '') ?? ''} keyword={p.searchTerms || p.nameEn || p.modelNumber || p.nameJa} productId={id} /></Card>
 

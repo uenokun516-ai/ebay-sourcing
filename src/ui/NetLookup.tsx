@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import { callWorker, searchLinks, medianOf, LookupError, type YahooResult, type EbayResult } from '../core/lookup';
-import { save } from '../data/db';
-import type { MarketObservation } from '../core/types';
+import { upsertRecord } from '../data/records';
+import { buildRecord } from '../core/records';
 import { useData, fmtDate, todayIso } from './store';
 import { Warn } from './components';
 
@@ -37,19 +37,20 @@ export function NetLookup({ code, keyword, productId, onUseName }: {
 
   const saveEbay = async () => {
     if (!ebay || !productId) return;
-    let n = 0;
+    let n = 0, upd = 0, same = 0;
     for (const it of ebay.items.slice(0, 20)) {
       if (!it.price) continue;
-      await save<MarketObservation>('observations', {
-        productId, condition: 'unknown', kind: 'listing', url: it.url, source: ebay.source + ' ' + ebay.market,
-        observedAt: todayIso(), soldAt: null, currency: it.currency || 'USD', price: it.price, shipping: it.shipping,
-        region: it.location || '', accessories: '', isLot: false, adopted: false,
-        excludeReason: '出品中の参考価格（成約ではない）', note: (it.condition || '') + ' ' + it.title.slice(0, 120),
-      });
-      n++;
+      const r = await upsertRecord(buildRecord({
+        url: it.url, sourceType: 'active_listing', method: 'api', observedAt: ebay.fetchedAt, publishedAt: null, soldAt: null, endsAt: null,
+        titleRaw: it.title, bodyText: '', nameJa: '', nameEn: '', modelNumber: '', code: code, region: it.location || '', edition: '', color: '',
+        condition: 'unknown', accessories: '', quantity: null, price: it.price, shipping: it.shipping, currency: it.currency || 'USD',
+        priceKind: (it.buyingOptions || []).includes('AUCTION') ? 'current_bid' : 'fixed', buyNowPrice: null, stockStatus: 'available',
+        productId, matchStatus: 'candidate', matchNote: '', socialClass: null, evidence: `${ebay.source} ${ebay.market}（${it.condition ?? '状態不明'}）`,
+      }));
+      if (r.status === 'new') n++; else if (r.status === 'updated') upd++; else same++;
     }
     await reload();
-    setSaved(`出品中の参考価格として ${n} 件保存しました（成約の統計には入りません）`);
+    setSaved(`出品中のデータとして保存：新規 ${n}件・価格変化 ${upd}件・変化なし ${same}件（成約の統計には入りません）`);
   };
 
   const ebayPrices = ebay?.items.map((i) => i.price) ?? [];
